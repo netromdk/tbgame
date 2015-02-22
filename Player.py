@@ -2,7 +2,7 @@
 # Base class for representing a player in a game.
 
 class Player():
-    def __init__(self, score):
+    def __init__(self, score = 0):
         self.score = score
 
     def getScore(self):
