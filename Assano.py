@@ -6,14 +6,6 @@ from Player import Player
 from util import getInt
 from constants import CONSOLE
 
-class AssanoPlayer(Player):
-    def __init__(self, name, score):
-        super().__init__(score)
-        self.name = name
-
-    def getName(self):
-        return self.name
-
 class Assano(Game):
     def __init__(self):
         super().__init__()
@@ -79,7 +71,7 @@ class Assano(Game):
                            default = self.initScore,
                            signed = False)
             
-            self._setPlayer(num, AssanoPlayer(name, score))
+            self._setPlayer(num, Player(name, score))
             break
 
     def _printSummary(self):
