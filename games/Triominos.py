@@ -20,7 +20,7 @@ class Triominos(Game):
     def nextTurn(self):
         super().nextTurn()
 
-        # Stop if o player has reached the end game points and all
+        # Stop if a player has reached the end game points and all
         # players have played their turn.
         if self._checkWinner(): return
 
@@ -29,13 +29,10 @@ class Triominos(Game):
         print("\n=== Turn {}: {} (#{}) ==="
               .format(self.turn, curPlayer.getName(), self.curid))
         while True:
-            print("\n[T]ake piece (-5)\n"
-                  "[C]an't play piece (-10)\n"
-                  "[P]lay piece\n"
-                  "[S]ummary\n"
-                  "[E]nd game\n", end = " ")
+            print("\n[T]ake (-5), [C]an't (-10), [P]lay, [S]ummary, [E]nd, [?] Help",
+                  end = " ")
             data = input(CONSOLE).lower()
-            if data not in ["t", "c", "p", "s", "e"]:
+            if data not in ["t", "c", "p", "s", "e", "?"]:
                 continue
 
             if data == "t":
@@ -50,15 +47,17 @@ class Triominos(Game):
                 score = getInt("How many points was played?")
 
                 while True:
-                    print("Made [B]ridge (+40)\n"
-                          "Made [H]exagon (+50)\n"
-                          "[R]ound won\n"
-                          "[P]ass turn\n", end = " ")
+                    print("[R]ound, [P]ass, [B]ridge (+40), [H]exagon (+40), [?] Help",
+                          end = " ")
                     data = input(CONSOLE).lower()
-                    if data not in ["b", "h", "r", "p"]:
+                    if data not in ["b", "h", "r", "p", "?"]:
                         continue
 
-                    if data == "b":
+                    if data == "r":
+                        self._getRemainingPoints(self.curid, curPlayer)
+                        newRound = True
+
+                    elif data == "b":
                         score += 40
                         continue
 
@@ -66,9 +65,13 @@ class Triominos(Game):
                         score += 50
                         continue
 
-                    elif data == "r":
-                        self._getRemainingPoints(self.curid, curPlayer)
-                        newRound = True
+                    elif data == "?":
+                        print("\n[R]ound won\n"
+                              "[P]ass turn\n"
+                              "Made [B]ridge (+40)\n"
+                              "Made [H]exagon (+50)\n")
+                        continue
+
                     break
 
                 curPlayer.addScore(score)
@@ -91,6 +94,14 @@ class Triominos(Game):
             elif data == "e":
                 self._setFinished()
                 break
+
+            elif data == "?":
+                print("\n[T]ake piece (-5)\n"
+                      "[C]an't play piece (-10)\n"
+                      "[P]lay piece\n"
+                      "[S]ummary\n"
+                      "[E]nd game")
+                continue
 
         self.curid += 1
         if self._checkWinner(): return
