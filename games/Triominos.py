@@ -47,18 +47,18 @@ class Triominos(Game):
 
                 while True:
                     print("Made [B]ridge (40)\n"
-                          "Made [K]eel (50)\n"
+                          "Made [H]exagon (50)\n"
                           "[R]ound won\n"
                           "[P]ass turn\n", end = " ")
                     data = input(CONSOLE).lower()
-                    if data not in ["b", "k", "r", "p"]:
+                    if data not in ["b", "h", "r", "p"]:
                         continue
 
                     if data == "b":
                         score += 40
                         continue
 
-                    elif data == "k":
+                    elif data == "h":
                         score += 50
                         continue
 
