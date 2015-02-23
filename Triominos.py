@@ -56,23 +56,28 @@ class Triominos(Game):
 
                     if data == "b":
                         score += 40
+                        continue
+
                     elif data == "k":
                         score += 50
+                        continue
+
                     elif data == "r":
                         IDs = list(self.players.keys())
                         IDs.remove(self.curid)
                         points = 0
                         for pid in IDs:
                             player = self.players[pid]
-                            score = getInt("Piece values left for {}".format(player.getName()))
-                            points += score
+                            left = getInt("Piece values left for {}".format(player.getName()))
+                            points += left
                         curPlayer.addScore(points)
                         newRound = True
-                        self._resetTurns()
-                        self._printSummary()
                     break
-                
+
                 curPlayer.addScore(score)
+                if newRound:
+                    self._resetTurns()
+                    self._printSummary()
                 break
 
             elif data == "b":
