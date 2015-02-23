@@ -5,8 +5,10 @@
 # play without requiring a lot of paper and pencils.
 import sys
 from Assano import Assano
+from Triominos import Triominos
 
-GAMES = {"assano": Assano}
+GAMES = {"assano": Assano,
+         "triominos": Triominos}
 
 def usage():
     print("Usage: {} [-h] <game>".format(sys.argv[0]))
