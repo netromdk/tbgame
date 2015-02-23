@@ -70,7 +70,7 @@ class Triominos(Game):
                             player = self.players[pid]
                             left = getInt("Piece values left for {}".format(player.getName()))
                             points += left
-                        curPlayer.addScore(points)
+                        curPlayer.addScore(points + 25)
                         newRound = True
                     break
 
