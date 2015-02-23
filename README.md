@@ -3,9 +3,10 @@ tbgame implements turn-based games for making board games easier to play without
 
 # Usage
 ```
-Usage: tbgame.py [-h] <game>
+Usage: tbgame.py [-h] <game> [<saved data>]
+Start new game or resume using saved data file.
 
 Available games:
-  assano
   triominos
+  assano
 ```

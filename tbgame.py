@@ -10,13 +10,15 @@ GAMES = {"assano": Assano,
          "triominos": Triominos}
 
 def usage():
-    print("Usage: {} [-h] <game>".format(sys.argv[0]))
+    print("Usage: {} [-h] <game> [<saved data>]".format(sys.argv[0]))
+    print("Start new game or resume using saved data file.")
     print("\nAvailable games:")
     for g in GAMES:
         print("  {}".format(g))
 
 if __name__ == "__main__":
-    if len(sys.argv) <= 1:
+    args = len(sys.argv)
+    if args <= 1 or args > 3:
         usage()
         exit(-1)
 
@@ -25,13 +27,24 @@ if __name__ == "__main__":
         usage()
         exit(0)
 
+    savedData = None
+    if args == 3:
+        savedData = sys.argv[2]
+
     if not cmd in GAMES:
         print("Game not found: {}".format(cmd))
         exit(-1)
-        
-    print("Game: {}\n".format(cmd))
+
+    print("Game: {}".format(cmd))
+    if savedData:
+        print("Resuming: {}".format(savedData))
+    print("")
+
     game = GAMES[cmd]()
-    game.setup()
+    if savedData:
+        game.load(savedData)
+    else:
+        game.setup()
     game.start()
     while not game.isFinished():
         game.nextTurn()

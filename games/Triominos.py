@@ -3,12 +3,13 @@
 
 from Game import Game
 from Player import Player
-from util import getInt
+from util import getInt, getBool
 from constants import CONSOLE
 
 class Triominos(Game):
     def __init__(self):
         super().__init__()
+        self.name = "Triominos"
         self.minPlayers = 2
         self.maxPlayers = 6
         self.curid = 1 # Current player ID
@@ -117,15 +118,19 @@ class Triominos(Game):
         (win, wid) = self._getWinner()
         print("The winner is {} with {} points!"
               .format(win.getName(), win.getScore()))
+        if getBool("Save game state to resume later?"):
+            self._save()
 
-    def _createPlayer(self, num):
-        while True:
-            name = input("Name of player #{}: ".format(num))
-            if len(name) == 0:
-                continue
-
-            self._setPlayer(num, Player(name))
-            break
+    def _createPlayer(self, num, values = None):
+        if not values:
+            while True:
+                name = input("Name of player #{}: ".format(num))
+                if len(name) == 0:
+                    continue
+                self._setPlayer(num, Player(name))
+                break
+        else:
+            self._setPlayer(num, Player(*values))
 
     def _printSummary(self):
         print("\nGame Summary:")

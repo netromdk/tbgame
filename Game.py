@@ -3,9 +3,12 @@
 
 from abc import ABCMeta, abstractmethod
 from util import getInt
+import json
+from datetime import datetime
 
 class Game(metaclass = ABCMeta):
     def __init__(self):
+        self.name = None
         self.numPlayers = None
         self.minPlayers = 2
         self.maxPlayers = 2
@@ -22,6 +25,30 @@ class Game(metaclass = ABCMeta):
                                  min = self.minPlayers, max = self.maxPlayers)
         for i in range(self.numPlayers):
             self._createPlayer(i + 1)
+
+    def load(self, path):
+        try:
+            data = json.load(open(path, "r"))
+            for key in data:
+                if key == "numPlayers":
+                    self.numPlayers = data[key]
+                elif key == "initScore":
+                    self.initScore = data[key]
+                elif key == "endScore":
+                    self.endScore = data[key]
+                elif key == "turn":
+                    self.turn = data[key]
+                elif key == "totalTurns":
+                    self.totalTurns = data[key]
+                elif key == "players":
+                    pid = 1
+                    for player in data[key]:
+                        self._createPlayer(pid, player)
+                        pid += 1
+        except Exception as e:
+            print("Could not resume!")
+            print("Exception: {}".format(e))
+            exit(-1)
 
     def nextTurn(self):
         self.turn += 1
@@ -45,7 +72,7 @@ class Game(metaclass = ABCMeta):
         pass
 
     @abstractmethod
-    def _createPlayer(self, num):
+    def _createPlayer(self, num, values = None):
         pass
 
     def _setPlayer(self, num, player):
@@ -60,3 +87,24 @@ class Game(metaclass = ABCMeta):
                 max = (player, key)
         return max
 
+    def _getSaveData(self):
+        # Leave out minPlayers, maxPlayers, and finished on purpose!
+        data = {"numPlayers": self.numPlayers,
+                "initScore": self.initScore,
+                "endScore": self.endScore,
+                "turn": self.turn,
+                "totalTurns": self.totalTurns}
+        plist = []
+        for player in self.players.values():
+            plist.append(player.toTuple())
+        data["players"] = plist
+        return data
+
+    def _save(self):
+        data = self._getSaveData()
+        now = datetime.now()
+        path = "{}.{}.json".format(self.name, now.isoformat())
+        data = json.dumps(data)
+        with open(path, "wt") as f:
+            f.write(data)
+        print("Saved to {}".format(path))

@@ -14,3 +14,6 @@ class Player():
 
     def addScore(self, value):
         self.score += value
+
+    def toTuple(self):
+        return (self.name, self.score)

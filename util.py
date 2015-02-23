@@ -6,7 +6,7 @@ def getInt(msg, default = None, signed = True, zeroable = False, allowed = None,
     if default != None:
         msg += " [" + str(default) + "]"    
     while True:
-        print(msg, end=" ")
+        print(msg, end = " ")
         data = input(CONSOLE)
         try:
             res = int(data)
@@ -20,3 +20,12 @@ def getInt(msg, default = None, signed = True, zeroable = False, allowed = None,
         except:
             if default != None and data == "":
                 return default
+
+def getBool(msg):
+    while True:
+        print(msg, end = " ")
+        data = input(CONSOLE).lower()
+        if data in ["yes", "y", "true", "t"]:
+            return True
+        elif data in ["no", "n", "false", "f"]:
+            return False

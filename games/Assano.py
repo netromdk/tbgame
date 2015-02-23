@@ -3,12 +3,13 @@
 
 from Game import Game
 from Player import Player
-from util import getInt
+from util import getInt, getBool
 from constants import CONSOLE
 
 class Assano(Game):
     def __init__(self):
         super().__init__()
+        self.name = "Assano"
         self.minPlayers = 2
         self.maxPlayers = 6 # What is actual max?
 
@@ -60,19 +61,24 @@ class Assano(Game):
         (win, wid) = self._getWinner()
         print("The winner is {} with {} points!"
               .format(win.getName(), win.getScore()))
+        if getBool("Save game state to resume later?"):
+            self._save()
 
-    def _createPlayer(self, num):
-        while True:
-            name = input("Name of player #{}: ".format(num))
-            if len(name) == 0:
-                continue
+    def _createPlayer(self, num, values = None):
+        if not values:
+            while True:
+                name = input("Name of player #{}: ".format(num))
+                if len(name) == 0:
+                    continue
 
-            score = getInt("Initial score of player #{}".format(num),
-                           default = self.initScore,
-                           signed = False)
+                score = getInt("Initial score of player #{}".format(num),
+                               default = self.initScore,
+                               signed = False)
             
-            self._setPlayer(num, Player(name, score))
-            break
+                self._setPlayer(num, Player(name, score))
+                break
+        else:
+            self._setPlayer(num, Player(*values))
 
     def _printSummary(self):
         print("\nGame Summary:")
