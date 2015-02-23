@@ -52,9 +52,11 @@ class Game(metaclass = ABCMeta):
         self.players[num] = player
 
     def _getWinner(self):
-        max = list(self.players.values())[0]
-        for player in self.players.values():
-            if player.getScore() > max.getScore():
-                max = player
+        keys = list(self.players.keys())
+        max = (self.players[keys[0]], keys[0])
+        for key in keys:
+            player = self.players[key]
+            if player.getScore() > max[0].getScore():
+                max = (player, key)
         return max
 

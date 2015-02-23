@@ -15,10 +15,14 @@ class Triominos(Game):
 
     def setup(self):
         super().setup()
-        self.endScore = getInt("How many points to win?", default = 500)
+        self.endScore = getInt("How many points to win?", default = 400)
 
     def nextTurn(self):
         super().nextTurn()
+
+        # Stop if o player has reached the end game points and all
+        # players have played their turn.
+        if self._checkWinner(): return
 
         newRound = False
         curPlayer = self.players[self.curid]
@@ -46,8 +50,8 @@ class Triominos(Game):
                 score = getInt("How many points was played?")
 
                 while True:
-                    print("Made [B]ridge (40)\n"
-                          "Made [H]exagon (50)\n"
+                    print("Made [B]ridge (+40)\n"
+                          "Made [H]exagon (+50)\n"
                           "[R]ound won\n"
                           "[P]ass turn\n", end = " ")
                     data = input(CONSOLE).lower()
@@ -63,14 +67,7 @@ class Triominos(Game):
                         continue
 
                     elif data == "r":
-                        IDs = list(self.players.keys())
-                        IDs.remove(self.curid)
-                        points = 0
-                        for pid in IDs:
-                            player = self.players[pid]
-                            left = getInt("Piece values left for {}".format(player.getName()))
-                            points += left
-                        curPlayer.addScore(points + 25)
+                        self._getRemainingPoints(self.curid, curPlayer)
                         newRound = True
                     break
 
@@ -95,12 +92,10 @@ class Triominos(Game):
                 self._setFinished()
                 break
 
-        if curPlayer.getScore() >= self.endScore:
-            self._setFinished()
-        else:
-            self.curid += 1
-            if newRound or self.curid > self.numPlayers:
-                self.curid = 1
+        self.curid += 1
+        if self._checkWinner(): return
+        if newRound or self.curid > self.numPlayers:
+            self.curid = 1
 
     def start(self):
         print("\n=== Game started ===")
@@ -108,7 +103,7 @@ class Triominos(Game):
     def end(self):
         print("\n=== Game ended after {} turns ===".format(self.totalTurns))
         self._printSummary()
-        win = self._getWinner()
+        (win, wid) = self._getWinner()
         print("The winner is {} with {} points!"
               .format(win.getName(), win.getScore()))
 
@@ -128,4 +123,24 @@ class Triominos(Game):
             print("  {}: {}, {} points"
                   .format(num, player.getName(), player.getScore()))
         print("")
+
+    def _checkWinner(self):
+        (win, wid) = self._getWinner()
+        if win.getScore() >= self.endScore and self.curid > self.numPlayers:
+            print("\nGame is over because {} has {} points (end score is {})."
+                  .format(win.getName(), win.getScore(), self.endScore))
+            self._getRemainingPoints(wid, win)
+            self._setFinished()
+            return True
+        return False
+
+    def _getRemainingPoints(self, cid, cp):
+        IDs = list(self.players.keys())
+        IDs.remove(cid)
+        points = 0
+        for pid in IDs:
+            player = self.players[pid]
+            left = getInt("Piece values left for {}".format(player.getName()))
+            points += left
+        cp.addScore(points + 25)
 

@@ -57,7 +57,7 @@ class Assano(Game):
     def end(self):
         print("\n=== Game ended after {} turns ===".format(self.totalTurns))
         self._printSummary()
-        win = self._getWinner()
+        (win, wid) = self._getWinner()
         print("The winner is {} with {} points!"
               .format(win.getName(), win.getScore()))
 
