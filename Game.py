@@ -6,30 +6,35 @@ from util import getInt
 
 class Game(metaclass = ABCMeta):
     def __init__(self):
+        self.numPlayers = None
         self.minPlayers = 2
         self.maxPlayers = 2
         self.players = {}
         self.initScore = 0
         self.endScore = None
         self.turn = 0
+        self.totalTurns = 0
         self.finished = False
 
     def setup(self):
-        numPlayers = getInt("How many players? [min={}, max={}]"
-                            .format(self.minPlayers, self.maxPlayers),
-                            min = self.minPlayers, max = self.maxPlayers)
-        for i in range(numPlayers):
+        self.numPlayers = getInt("How many players? [min={}, max={}]"
+                                 .format(self.minPlayers, self.maxPlayers),
+                                 min = self.minPlayers, max = self.maxPlayers)
+        for i in range(self.numPlayers):
             self._createPlayer(i + 1)
 
     def nextTurn(self):
         self.turn += 1
-        print("[Turn {}]".format(self.turn))
+        self.totalTurns += 1
 
     def isFinished(self):
         return self.finished
 
     def _setFinished(self):
         self.finished = True
+
+    def _resetTurns(self):
+        self.turn = 0
 
     @abstractmethod
     def start(self):
