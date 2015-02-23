@@ -4,8 +4,7 @@
 # tbgame implements turn-based games for making board games easier to
 # play without requiring a lot of paper and pencils.
 import sys
-from Assano import Assano
-from Triominos import Triominos
+from games import Assano, Triominos
 
 GAMES = {"assano": Assano,
          "triominos": Triominos}
