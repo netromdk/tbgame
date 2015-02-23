@@ -7,4 +7,5 @@ Usage: tbgame.py [-h] <game>
 
 Available games:
   assano
+  triominos
 ```
