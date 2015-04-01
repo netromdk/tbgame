@@ -45,10 +45,10 @@ class Triominos(Game):
                 break
 
             elif data == "p":
-                score = getInt("How many points was played?")
+                score = getInt("How many points was played?", zeroable = True)
 
                 while True:
-                    print("[R]ound, [P]ass, [B]ridge (+40), [H]exagon (+40), [?] Help",
+                    print("[R]ound, [P]ass, [B]ridge (+40), [H]exagon (+50), [?] Help",
                           end = " ")
                     data = input(CONSOLE).lower()
                     if data not in ["b", "h", "r", "p", "?"]:
@@ -156,7 +156,8 @@ class Triominos(Game):
         points = 0
         for pid in IDs:
             player = self.players[pid]
-            left = getInt("Piece values left for {}".format(player.getName()))
+            left = getInt("Piece values left for {}".format(player.getName()),
+                          zeroable = True)
             points += left
         cp.addScore(points + 25)
 
