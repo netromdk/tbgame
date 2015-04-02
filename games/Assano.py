@@ -35,7 +35,8 @@ class Assano(Game):
                 points = 0
                 for pid in IDs:
                     player = self.players[pid]
-                    score = getInt("Negative score for {}".format(player.getName()))
+                    score = getInt("Negative score for {}".format(player.getName()),
+                                   zeroable = True)
                     points += score
                     player.addScore(score * -1)
                 wp.addScore(points)
