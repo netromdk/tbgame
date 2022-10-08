@@ -39,6 +39,7 @@ class Assano(Game):
                                    zeroable = True)
                     points += score
                     player.addScore(score * -1)
+                print("Adding {} points to {}".format(points, wp.getName()))
                 wp.addScore(points)
                 if wp.getScore() >= self.endScore:
                     self._setFinished()
