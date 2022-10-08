@@ -56,7 +56,7 @@ class Assano(Game):
 
     def start(self):
         print("\n=== Game started ===\n")
-            
+
     def end(self):
         print("\n=== Game ended after {} turns ===".format(self.totalTurns))
         self._printSummary()
@@ -76,7 +76,7 @@ class Assano(Game):
                 score = getInt("Initial score of player #{}".format(num),
                                default = self.initScore,
                                signed = False)
-            
+
                 self._setPlayer(num, Player(name, score))
                 break
         else:
@@ -84,8 +84,13 @@ class Assano(Game):
 
     def _printSummary(self):
         print("\nGame Summary:")
-        for num in self.players.keys():
-            player = self.players[num]
-            print("  {}: {}, {} points"
-                  .format(num, player.getName(), player.getScore()))
+        # Sort largest scores first.
+        sorted_items = sorted(self.players.items(), reverse=True,
+                              key=lambda player: player[1].getScore())
+        pos = 1
+        for (num, player) in sorted_items:
+            print("  #{}: {:<15} {:>3} points ({} left)".
+                  format(pos, "{} ({})".format(player.getName(), num), player.getScore(),
+                         self.endScore - player.getScore()))
+            pos += 1
         print("")
